@@ -1,0 +1,45 @@
+name: Unity CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Unity License
+        run: |
+          echo "${{ secrets.UNITY_LICENSE }}" > Unity_v2022.x.ulf
+          mkdir "D:\Hub\2022.3.25f1"
+          move Unity_v2022.x.ulf "D:\Hub\2022.3.25f1\Unity_v2022.x.ulf"
+        shell: cmd
+
+      - name: Cache Unity packages
+        uses: actions/cache@v2
+        with:
+          path: Library
+          key: ${{ runner.os }}-unity-${{ hashFiles('**/PackagesLock.json') }}
+
+      - name: Build project
+        run: |
+          $unityPath = "D:\Hub\2022.3.7f1\Editor\Unity.exe"
+          & $unityPath -quit -batchmode -nographics -projectPath "." -buildTarget StandaloneWindows64 -buildPath "build\StandaloneWindows64"
+        continue-on-error: true
+
+      - name: Set build artifact path
+        run: echo "BUILD_PATH=build\StandaloneWindows64" >> $GITHUB_ENV
+
+      - name: Upload build
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: ${{ env.BUILD_PATH }}
