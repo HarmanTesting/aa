@@ -24,6 +24,14 @@ jobs:
         with:
           path: Library
           key: ${{ runner.os }}-unity-${{ hashFiles('**/PackagesLock.json') }}
+
+      - name: Debug paths
+        run: |
+          echo "Listing Unity directory contents..."
+          dir "C:\Program Files\Unity\Hub\Editor\2022.3.25f1-x86_64\Editor"
+          echo "Listing project directory contents..."
+          dir "E:\MyTestingProjects\aa"
+        shell: cmd
           
       - name: Build project
         run: |
@@ -40,11 +48,3 @@ jobs:
         with:
           name: build
           path: ${{ env.BUILD_PATH }}
-      
-      - name: Debug paths
-        run: |
-          echo "Listing Unity directory contents..."
-          dir "C:\Program Files\Unity\Hub\Editor\2022.3.25f1-x86_64\Editor"
-          echo "Listing project directory contents..."
-          dir "E:\MyTestingProjects\aa"
-        shell: cmd
