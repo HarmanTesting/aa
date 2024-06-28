@@ -14,9 +14,9 @@ jobs:
           
       - name: Set up Unity License
         run: |
-          echo "${{ secrets.UNITY_LICENSE }}" > Unity_v2020.x.ulf
+          echo "${{ secrets.UNITY_LICENSE }}" > Unity_v2022.3.25f1.ulf
           mkdir C:\Unity
-          move Unity_v2020.x.ulf C:\Unity\Unity_v2020.x.ulf
+          move Unity_v2022.3.25f1.ulf C:\Unity\Unity_v2022.3.25f1.ulf
         shell: powershell
         
       - name: Cache Unity packages
@@ -27,7 +27,7 @@ jobs:
           
       - name: Build project
         run: |
-          Start-Process -FilePath "C:\Users\Deftsoft-Unity\AppData\Local\Temp\Unity\Editor\Unity.exe" `
+          Start-Process -FilePath "C:\Program Files\Unity\Hub\Editor\2022.3.25f1-x86_64\Editor\Unity.exe" `
                         -ArgumentList '-quit', '-batchmode', '-nographics', '-projectPath', '.', '-buildTarget', 'StandaloneWindows64', '-buildPath', 'build\StandaloneWindows64' `
                         -NoNewWindow -Wait
         continue-on-error: true
