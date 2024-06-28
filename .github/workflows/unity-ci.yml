@@ -1,45 +1,26 @@
-name: Unity CI
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
+name: Build project
+on: [push]
 jobs:
-  build:
-    runs-on: windows-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Unity License
-        run: |
-          echo "${{ secrets.UNITY_LICENSE }}" > Unity_v2022.x.ulf
-          mkdir "D:\Hub\2022.3.25f1"
-          move Unity_v2022.x.ulf "D:\Hub\2022.3.25f1\Unity_v2022.x.ulf"
-        shell: cmd
-
-      - name: Cache Unity packages
-        uses: actions/cache@v2
-        with:
-          path: Library
-          key: ${{ runner.os }}-unity-${{ hashFiles('**/PackagesLock.json') }}
-
-      - name: Build project
-        run: |
-          $unityPath = "D:\Hub\2022.3.7f1\Editor\Unity.exe"
-          & "$unityPath" -quit -batchmode -nographics -projectPath "." -buildTarget StandaloneWindows64 -buildPath "build\StandaloneWindows64"
-        continue-on-error: true
-
-      - name: Set build artifact path
-        run: echo "BUILD_PATH=build\StandaloneWindows64" >> $GITHUB_ENV
-
-      - name: Upload build
-        uses: actions/upload-artifact@v2
-        with:
-          name: build
-          path: ${{ env.BUILD_PATH }}
+buildForAllSupported Platforms:
+name: Build for ${{ matrix.targetPlatform }} Iuns-on: ubuntu-latest
+strategy:
+fail-fast: false
+matrix:
+targetPlatform:
+StandaloneWindows64 # Build a Windows 64-bit standalone.
+steps:
+uses: actions/checkout@v2
+with:
+fetch-depth: 0
+lfs: true
+uses: actions/cache@v2
+with:
+path: Library
+key: Library-${{ matrix.targetPlatform }} restore-keys: Library-
+uses: game-ci/unity-builder@v2
+env:
+│UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+with:
+targetPlatform: ${{ matrix.targetPlatform }} uses: actions/upload-artifact@v2
+with:
+name: Build-${{ matrix.targetPlatform }} path: build/${{ matrix.targetPlatform }}
