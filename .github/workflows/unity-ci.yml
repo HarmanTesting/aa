@@ -11,14 +11,14 @@ jobs:
         uses: actions/checkout@v4
         with:
           lfs: true
-          
+
       - name: Set up Unity License
         run: |
           echo "${{ secrets.UNITY_LICENSE }}" > Unity_v2022.3.25f1.ulf
           mkdir C:\Unity
           move Unity_v2022.3.25f1.ulf C:\Unity\Unity_v2022.3.25f1.ulf
         shell: powershell
-        
+
       - name: Cache Unity packages
         uses: actions/cache@v2
         with:
@@ -27,13 +27,13 @@ jobs:
           
       - name: Build project
         run: |
-          Start-Process -FilePath "C:\Program Files\Unity\Hub\Editor\2022.3.25f1-x86_64\Editor\" `
-                        -ArgumentList '-quit', '-batchmode', '-nographics', '-projectPath', '.', '-buildTarget', 'StandaloneWindows64', '-buildPath', 'build\StandaloneWindows64' `
-                        -NoNewWindow -Wait
-        continue-on-error: true
+          echo "Compiling the code..."
+          "C:\Program Files\Unity\Hub\Editor\2022.3.25f1-x86_64\Editor\Unity.exe" -quit -batchmode -nographics -projectPath ./"Testing Asignment 2" -buildTarget StandaloneWindows64 -buildPath ./Build/Builds/WindowsBuild
+          echo "Compile complete."
+        shell: cmd
         
       - name: Set build artifact path
-        run: echo "BUILD_PATH=build/StandaloneWindows64" >> $GITHUB_ENV
+        run: echo "BUILD_PATH=Build/Builds/WindowsBuild" >> $GITHUB_ENV
         
       - name: Upload build
         uses: actions/upload-artifact@v2
