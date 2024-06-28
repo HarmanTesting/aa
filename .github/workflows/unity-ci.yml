@@ -28,12 +28,12 @@ jobs:
       - name: Build project
         run: |
           echo "Compiling the code..."
-          "C:\Program Files\Unity\Hub\Editor\2022.3.25f1-x86_64\Editor\Unity.exe" -quit -batchmode -nographics -projectPath ./"Testing Asignment 2" -buildTarget StandaloneWindows64 -buildPath ./Build/Builds/WindowsBuild
+          "C:\Program Files\Unity\Hub\Editor\2022.3.25f1-x86_64\Editor\Unity.exe" -quit -batchmode -nographics -projectPath "E:\MyTestingProjects\aa" -buildTarget StandaloneWindows64 -buildPath "E:\MyTestingProjects\aa\Build\Builds\WindowsBuild"
           echo "Compile complete."
         shell: cmd
-        
+
       - name: Set build artifact path
-        run: echo "BUILD_PATH=Build/Builds/WindowsBuild" >> $GITHUB_ENV
+        run: echo "BUILD_PATH=E:\MyTestingProjects\aa\Build\Builds\WindowsBuild" >> $GITHUB_ENV
         
       - name: Upload build
         uses: actions/upload-artifact@v2
