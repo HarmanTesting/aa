@@ -27,7 +27,7 @@ jobs:
           
       - name: Build project
         run: |
-          Start-Process -FilePath "C:\Program Files\Unity\Hub\Editor\2022.3.25f1-x86_64\Editor\Unity.exe" `
+          Start-Process -FilePath "C:\Program Files\Unity\Hub\Editor\2022.3.25f1-x86_64\Editor\" `
                         -ArgumentList '-quit', '-batchmode', '-nographics', '-projectPath', '.', '-buildTarget', 'StandaloneWindows64', '-buildPath', 'build\StandaloneWindows64' `
                         -NoNewWindow -Wait
         continue-on-error: true
